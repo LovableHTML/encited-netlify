@@ -1,0 +1,7 @@
+config:
+  slug: encited
+  name: encited
+  ui:
+    surfaces:
+      - extension-team-configuration
+      - extension-top-level-site-configuration
