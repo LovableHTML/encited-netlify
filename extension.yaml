@@ -1,6 +1,6 @@
 config:
   slug: encited
-  name: encited
+  name: Encited Prerendering
   ui:
     surfaces:
       - extension-team-configuration

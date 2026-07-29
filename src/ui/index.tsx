@@ -1,7 +1,7 @@
 import "./index.css";
 import { createRoot } from "react-dom/client";
 import { NetlifyExtensionUI } from "@netlify/sdk/ui/react/components";
-import { App } from "./App.jsx";
+import { App } from "./App";
 
 const rootNodeId = "root";
 let rootNode = document.getElementById(rootNodeId);
@@ -14,5 +14,5 @@ const root = createRoot(rootNode);
 root.render(
   <NetlifyExtensionUI>
     <App />
-  </NetlifyExtensionUI>
+  </NetlifyExtensionUI>,
 );

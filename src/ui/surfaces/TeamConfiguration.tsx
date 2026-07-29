@@ -1,20 +1,48 @@
 import {
+  Alert,
   Card,
   CardLoader,
   CardTitle,
-  Checkbox,
   Form,
-  FormField,
   FormFieldSecret,
+  Link,
   TeamConfigurationSurface,
 } from "@netlify/sdk/ui/react/components";
-import { useNetlifySDK } from "@netlify/sdk/ui/react";
-import { TeamConfigSchema } from "../../schema/team-config.js";
-import { trpc } from "../trpc.js";
-import logoImg from "../../assets/netlify-logo.png";
+import { TeamConfigSchema } from "../../schema/team-config";
+import { trpc } from "../trpc";
+
+type SaveResult = {
+  updatedSites: string[];
+  failedSites: string[];
+  propagationFailed: boolean;
+};
+
+const saveResultView = (
+  result: SaveResult,
+): { type: "success" | "warn"; message: string } => {
+  if (result.propagationFailed) {
+    return {
+      type: "warn",
+      message:
+        "Key saved, but your sites could not be checked — re-enable prerendering on each enabled site to update its key.",
+    };
+  }
+  if (result.failedSites.length > 0) {
+    return {
+      type: "warn",
+      message: `Key saved, but it could not be updated on: ${result.failedSites.join(", ")}. Re-enable prerendering on those sites to update their key.`,
+    };
+  }
+  if (result.updatedSites.length > 0) {
+    return {
+      type: "success",
+      message: `Key saved and updated on ${result.updatedSites.join(", ")} — each site is redeploying so the new key takes effect.`,
+    };
+  }
+  return { type: "success", message: "Key saved." };
+};
 
 export const TeamConfiguration = () => {
-  const sdk = useNetlifySDK();
   const trpcUtils = trpc.useUtils();
   const teamSettingsQuery = trpc.teamSettings.query.useQuery();
   const teamSettingsMutation = trpc.teamSettings.mutate.useMutation({
@@ -26,45 +54,49 @@ export const TeamConfiguration = () => {
   if (teamSettingsQuery.isLoading) {
     return <CardLoader />;
   }
+  const settings = teamSettingsQuery.data;
+  const saveResult = teamSettingsMutation.data;
 
   return (
     <TeamConfigurationSurface>
       <Card>
-        <img src={logoImg} />
-        <CardTitle>Example Section for {sdk.extension.name}</CardTitle>
+        <CardTitle>Connect your Encited account</CardTitle>
+        <p>
+          Encited serves fully rendered HTML to search engines and AI crawlers
+          (Googlebot, GPTBot, ClaudeBot, PerplexityBot) while your visitors keep
+          getting your SPA. Rendering runs on Encited's infrastructure, so your
+          Netlify functions never run a headless browser.
+        </p>
+        <p>
+          Create an account-wide API key in{" "}
+          <Link href="https://encited.com/settings/api-keys">
+            Encited → Settings → API keys
+          </Link>{" "}
+          and paste it below, then enable prerendering per site from each site's
+          extension configuration.
+        </p>
+        {settings?.hasApiKey && !saveResult && (
+          <Alert type="success">
+            Connected with API key {settings.apiKeyPreview}. Saving a new key
+            replaces it and updates every site with prerendering enabled.
+          </Alert>
+        )}
+        {saveResult && (
+          <Alert type={saveResultView(saveResult).type}>
+            {saveResultView(saveResult).message}
+          </Alert>
+        )}
         <Form
-          defaultValues={
-            teamSettingsQuery.data ?? {
-              exampleString: "",
-              exampleSecret: "",
-              exampleBoolean: false,
-              exampleNumber: 123,
-            }
-          }
+          defaultValues={{ apiKey: "" }}
           schema={TeamConfigSchema}
-          onSubmit={teamSettingsMutation.mutateAsync}
+          onSubmit={async (values) => {
+            await teamSettingsMutation.mutateAsync(values);
+          }}
         >
-          <FormField
-            name="exampleString"
-            type="text"
-            label="Example String"
-            helpText="This is an example string"
-          />
-          <FormField
-            name="exampleNumber"
-            type="number"
-            label="Example Number"
-            helpText="This is an example number"
-          />
           <FormFieldSecret
-            name="exampleSecret"
-            label="Example Secret"
-            helpText="This is an example secret"
-          />
-          <Checkbox
-            name="exampleBoolean"
-            label="Example Boolean"
-            helpText="This is an example boolean"
+            name="apiKey"
+            label="Encited API key"
+            helpText="Use an account-wide key so every site on this team can be enabled."
           />
         </Form>
       </Card>
