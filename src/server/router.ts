@@ -44,6 +44,38 @@ type SiteWithDomains = {
   url?: string;
 };
 
+// Secrets may not use the implicit "all" context (Netlify rejects it with a
+// 422), so the key is written with an explicit production-only context. That
+// scoping is deliberate beyond satisfying the API: preview and branch builds
+// never receive the key, so the edge function is never injected into
+// non-production deploys.
+const writeSiteApiKey = async (
+  client: Client,
+  teamId: string,
+  siteId: string,
+  apiKey: string,
+) => {
+  const existing = await client.getEnvironmentVariables({
+    accountId: teamId,
+    siteId,
+  });
+  const args = {
+    accountId: teamId,
+    siteId,
+    key: API_KEY_ENV_VAR,
+    values: [{ context: "production" as const, value: apiKey }],
+    isSecret: true,
+    scopes: ["builds", "functions", "runtime"] as (
+      "builds" | "functions" | "runtime"
+    )[],
+  };
+  if (existing.some((variable) => variable.key === API_KEY_ENV_VAR)) {
+    await client.updateEnvironmentVariable(args);
+  } else {
+    await client.createEnvironmentVariable(args);
+  }
+};
+
 const getSiteDomain = async (
   client: Client,
   siteId: string,
@@ -106,13 +138,7 @@ export const appRouter = router({
               );
               const parsed = SiteConfigSchema.safeParse(siteConfig?.config);
               if (!parsed.success || !parsed.data.enabled) return null;
-              await client.createOrUpdateVariables({
-                accountId: teamId,
-                siteId: site.id,
-                variables: { [API_KEY_ENV_VAR]: input.apiKey },
-                isSecret: true,
-                scopes: ["builds", "functions", "runtime"],
-              });
+              await writeSiteApiKey(client, teamId, site.id, input.apiKey);
               // Redeploy so the new key takes effect without manual action; a
               // site that can't redeploy still has the env var for next deploy.
               await client.redeploySite({ siteId: site.id }).catch(() => {});
@@ -171,13 +197,7 @@ export const appRouter = router({
                   "Connect your Encited account in the team-level extension configuration first",
               });
             }
-            await client.createOrUpdateVariables({
-              accountId: teamId,
-              siteId,
-              variables: { [API_KEY_ENV_VAR]: apiKey },
-              isSecret: true,
-              scopes: ["builds", "functions", "runtime"],
-            });
+            await writeSiteApiKey(client, teamId, siteId, apiKey);
             await client.createOrUpdateVariables({
               accountId: teamId,
               siteId,
