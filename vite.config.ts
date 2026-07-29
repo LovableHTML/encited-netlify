@@ -7,6 +7,9 @@ export default defineConfig(() => ({
   base: "",
   build: {
     outDir: "../../.ntli/site/static/ui",
+    // Vite 8's default lightningcss minifier rejects an unescaped SVG data-URL
+    // in @netlify/sdk's ui-react stylesheet.
+    cssMinify: "esbuild" as const,
   },
   root: "./src/ui",
   plugins: [react()],

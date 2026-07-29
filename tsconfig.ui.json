@@ -1,7 +1,7 @@
 {
   "extends": [
     "@tsconfig/recommended/tsconfig.json",
-    "@tsconfig/vite-react/tsconfig.json",
+    "@tsconfig/vite-react/tsconfig.json"
   ],
   "compilerOptions": {
     "noEmit": true,
@@ -9,8 +9,5 @@
     "verbatimModuleSyntax": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src/ui/",
-    "src/types/",
-  ]
+  "include": ["src/ui/", "src/types/"]
 }

@@ -1,3 +1,6 @@
 .cache
 .ntli
 node_modules
+.netlify
+*.tsbuildinfo
+deno.lock

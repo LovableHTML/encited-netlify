@@ -6,10 +6,9 @@
   "compilerOptions": {
     "noEmit": true,
     "sourceMap": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "module": "esnext",
+    "moduleResolution": "bundler"
   },
-  "exclude": [
-    "dist/",
-    "src/ui/"
-  ]
+  "exclude": ["dist/", "src/ui/"]
 }
