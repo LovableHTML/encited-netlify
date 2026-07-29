@@ -18,7 +18,6 @@ export type TestConnectionResult = {
     | "invalid_key"
     | "domain_not_registered"
     | "subscription_required"
-    | "domain_misconfigured"
     | "unreachable"
     | "error";
   httpStatus?: number;
@@ -79,9 +78,6 @@ export const testRenderConnection = async ({
   if (res.status === 401) result.status = "invalid_key";
   else if (res.status === 402) result.status = "subscription_required";
   else if (res.status === 403) result.status = "domain_not_registered";
-  else if (res.status === 400 && errorCode === "domain_has_no_origin_host") {
-    result.status = "domain_misconfigured";
-  }
   return result;
 };
 

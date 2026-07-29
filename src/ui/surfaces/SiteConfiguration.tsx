@@ -15,7 +15,6 @@ type TestStatus =
   | "invalid_key"
   | "domain_not_registered"
   | "subscription_required"
-  | "domain_misconfigured"
   | "unreachable"
   | "error";
 
@@ -47,12 +46,6 @@ const testResultView = (
       type: "error",
       message:
         "Your Encited workspace has no active subscription. Pick a plan in the Encited dashboard, then test again.",
-    };
-  }
-  if (status === "domain_misconfigured") {
-    return {
-      type: "error",
-      message: `${domain} is registered but has no origin host configured in Encited. Check the domain's settings in the Encited dashboard.`,
     };
   }
   return {
