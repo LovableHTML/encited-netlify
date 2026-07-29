@@ -36,9 +36,9 @@ The render endpoint (`GET /api/prerender/render?url=…`, `Authorization: Bearer
 - `304` — Encited chose passthrough (browser navigation, asset, non-HTML); call `context.next()`
 - Anything else / fetch failure — fail open, `context.next()`
 
-Error codes the connection test maps: `401` invalid key, `402 subscription_required`, `403` `domain_not_owned` / `api_key_domain_scope_mismatch`, `400 domain_has_no_origin_host`. Post-deploy recache uses `POST /api/prerender/cache/invalidate-site-cache` with `{ domain, prewarm: true }` (full-site invalidate; doesn't depend on a configured sitemap).
+Error codes the connection test maps: `401` invalid key, `402 subscription_required`, `403` `domain_not_owned` / `api_key_domain_scope_mismatch`, `400 domain_has_no_origin_host`. Post-deploy recache uses `POST /api/prerender/cache/invalidate-site-cache` with `{ domain, prewarm: true }` (full-site invalidate + prewarm).
 
-The source of truth for this contract is `worker/routes/prerender.ts` in the main Encited repo (`../lovablehtml`). If behavior seems off, check there before changing the mapping here. Domain onboarding rides the render endpoint's `pending → "via api"` auto-transition — do NOT switch to the Domains API (`/api/domains`), it's gated to Business+ plans and would break lower tiers.
+This contract is owned by the Encited service — treat the statuses above as authoritative rather than inferring new branches from observed responses. Domains are onboarded to the connected Encited account automatically on the first authenticated render call; the extension deliberately has no separate domain-registration step, and the Domains API must not be used here (it isn't available on all plans).
 
 ## Edge function constraints (src/edge-functions/)
 
