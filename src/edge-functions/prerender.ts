@@ -77,6 +77,13 @@ export default async (request: Request, context: EdgeContext) => {
         "transfer-encoding",
         "connection",
         "keep-alive",
+        // Upstream infrastructure headers from Encited's CDN — noise on the
+        // customer site's responses.
+        "alt-svc",
+        "cf-cache-status",
+        "cf-ray",
+        "nel",
+        "report-to",
       ]) {
         responseHeaders.delete(name);
       }
