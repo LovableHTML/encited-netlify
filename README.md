@@ -21,10 +21,10 @@ Netlify extension that serves [Encited](https://encited.com) prerendered HTML to
 ## Develop
 
 ```bash
-pnpm install
-pnpm run dev            # local extension dev server (requires netlify-cli login)
-pnpm run build          # builds into .ntli/ — what Netlify runs
-pnpm exec tsc --build   # typecheck both backend and UI projects
+npm install
+npm run dev         # local extension dev server (requires netlify-cli login)
+npm run build       # builds into .ntli/ — what Netlify runs
+npm run typecheck   # typecheck both backend and UI projects
 ```
 
 ## Publish

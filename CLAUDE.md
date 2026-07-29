@@ -5,12 +5,12 @@ Netlify partner extension for Encited (SPA prerendering for crawlers/AI agents).
 ## Commands
 
 ```bash
-pnpm install
-pnpm run dev          # extension dev server (requires netlify-cli login)
-pnpm run build        # netlify-extension build → .ntli/ (what Netlify runs)
-pnpm run typecheck    # tsc --build (backend + UI project references)
-pnpm run lint         # eslint flat config
-pnpm run format       # prettier --write
+npm install
+npm run dev          # extension dev server (requires netlify-cli login)
+npm run build        # netlify-extension build → .ntli/ (what Netlify runs)
+npm run typecheck    # tsc --build (backend + UI project references)
+npm run lint         # eslint flat config
+npm run format       # prettier --write
 ```
 
 No test framework. Validation = typecheck + lint + build. All three must pass before committing.
@@ -62,7 +62,7 @@ Revisit all four only on a new `@netlify/sdk` major.
 
 ## Conventions
 
-- Package manager is **pnpm** (`packageManager` field is authoritative). No bun/npm lockfiles.
+- Package manager is **npm** (`packageManager` field is authoritative). Avoid bun: its hoisting breaks `@netlify/build`'s named-export imports (`signal-exit`, `resolve`).
 - Relative imports are extensionless (`from "./trpc"`, not `"./trpc.js"`); both tsconfig projects use bundler module resolution to allow it.
 - The UI never receives the API key back from the server — `teamSettings.query` returns only `hasApiKey` + a masked preview. Keep it that way.
 - SDK UI components only (`@netlify/sdk/ui/react/components`); `Alert` levels are `success | error | info | warn` (not `warning`).
