@@ -61,13 +61,13 @@ export const TeamConfiguration = () => {
     <TeamConfigurationSurface>
       <Card>
         <CardTitle>Connect your Encited account</CardTitle>
-        <p>
+        <p className="tw-text-pretty">
           Encited serves fully rendered HTML to search engines and AI crawlers
           (Googlebot, GPTBot, ClaudeBot, PerplexityBot) while your visitors keep
           getting your SPA. Rendering runs on Encited's infrastructure, so your
           Netlify functions never run a headless browser.
         </p>
-        <p>
+        <p className="tw-text-pretty">
           Create an account-wide API key in{" "}
           <Link href="https://encited.com/settings/api-keys">
             Encited → Settings → API keys
@@ -76,13 +76,13 @@ export const TeamConfiguration = () => {
           extension configuration.
         </p>
         {settings?.hasApiKey && !saveResult && (
-          <Alert type="success">
+          <Alert type="success" className="tw-my-3">
             Connected with API key {settings.apiKeyPreview}. Saving a new key
             replaces it and updates every site with prerendering enabled.
           </Alert>
         )}
         {saveResult && (
-          <Alert type={saveResultView(saveResult).type}>
+          <Alert type={saveResultView(saveResult).type} className="tw-my-3">
             {saveResultView(saveResult).message}
           </Alert>
         )}

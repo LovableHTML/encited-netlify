@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  ButtonGroup,
   Card,
   CardLoader,
   CardTitle,
@@ -83,7 +84,7 @@ export const SiteConfiguration = () => {
       <SiteConfigurationSurface>
         <Card>
           <CardTitle>Encited Prerendering</CardTitle>
-          <Alert type="warn">
+          <Alert type="warn" className="tw-my-3">
             Connect your Encited account first: open this extension's team-level
             configuration and paste your API key.
           </Alert>
@@ -98,7 +99,7 @@ export const SiteConfiguration = () => {
     <SiteConfigurationSurface>
       <Card>
         <CardTitle>Encited Prerendering</CardTitle>
-        <p>
+        <p className="tw-text-pretty">
           Serves Encited's rendered snapshots of{" "}
           <strong>{settings.domain}</strong> to crawlers and AI agents; regular
           visitors keep getting your SPA. Make sure {settings.domain} is added
@@ -106,46 +107,55 @@ export const SiteConfiguration = () => {
           <Link href="https://encited.com/dashboard">Encited workspace</Link>.
         </p>
         {settings.enabled ? (
-          <Alert type="success">
+          <Alert type="success" className="tw-my-3">
             Prerendering is enabled. Crawler requests are served from Encited on
             every deploy.
           </Alert>
         ) : (
-          <Alert type="warn">
+          <Alert type="warn" className="tw-my-3">
             Prerendering is disabled for this site. Crawlers currently receive
             your unrendered SPA shell.
           </Alert>
         )}
-        <p>
+        <p className="tw-text-pretty">
           Enabling or disabling updates this site's environment variables and
           triggers a redeploy so the change takes effect immediately.
         </p>
-        <Button
-          onClick={() =>
-            setEnabledMutation.mutate({ enabled: !settings.enabled })
-          }
-          loading={setEnabledMutation.isPending}
-          variant={settings.enabled ? "danger" : "standard"}
-        >
-          {settings.enabled ? "Disable prerendering" : "Enable prerendering"}
-        </Button>
-        <Button
-          level="secondary"
-          onClick={() => testMutation.mutate()}
-          loading={testMutation.isPending}
-        >
-          Test connection
-        </Button>
+        <ButtonGroup className="tw-my-3">
+          <Button
+            onClick={() =>
+              setEnabledMutation.mutate({ enabled: !settings.enabled })
+            }
+            loading={setEnabledMutation.isPending}
+            variant={settings.enabled ? "danger" : "standard"}
+          >
+            {settings.enabled ? "Disable prerendering" : "Enable prerendering"}
+          </Button>
+          <Button
+            level="secondary"
+            onClick={() => testMutation.mutate()}
+            loading={testMutation.isPending}
+          >
+            Test connection
+          </Button>
+        </ButtonGroup>
         {testResult && (
-          <Alert type={testResultView(testResult.status, settings.domain).type}>
+          <Alert
+            type={testResultView(testResult.status, settings.domain).type}
+            className="tw-my-3"
+          >
             {testResultView(testResult.status, settings.domain).message}
           </Alert>
         )}
         {setEnabledMutation.error && (
-          <Alert type="error">{setEnabledMutation.error.message}</Alert>
+          <Alert type="error" className="tw-my-3">
+            {setEnabledMutation.error.message}
+          </Alert>
         )}
         {testMutation.error && (
-          <Alert type="error">{testMutation.error.message}</Alert>
+          <Alert type="error" className="tw-my-3">
+            {testMutation.error.message}
+          </Alert>
         )}
       </Card>
     </SiteConfigurationSurface>
