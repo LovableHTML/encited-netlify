@@ -22,7 +22,7 @@ After every successful deploy, the extension asks Encited to refresh the site's 
 
 - On-demand rendering API with cache invalidation and prewarming
 - Crawler analytics: which bots visit, what they're served, crawl-budget savings
-- Snapshot inspector — see exactly what crawlers see
+- Per-page snapshots — see exactly what crawlers receive from your Pre-rendering dashboard
 - Index status tracking and AI-visibility monitoring
 
 An active Encited subscription is required. Manage plans at [encited.com](https://encited.com).
