@@ -23,6 +23,7 @@ After every successful deploy, the extension asks Encited to refresh the site's 
 - On-demand rendering API with cache invalidation and prewarming
 - Crawler analytics: which bots visit, what they're served, crawl-budget savings
 - Per-page snapshots — see exactly what crawlers receive from your Pre-rendering dashboard
+- Technical SEO audits — crawl your site to surface indexability, metadata, and content issues page by page
 - Index status tracking and AI-visibility monitoring
 - Content gap analysis — see what's ranking and getting cited in your space that you haven't written yet, and turn AI's fan-out queries into research-backed content plans
 
