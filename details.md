@@ -24,5 +24,6 @@ After every successful deploy, the extension asks Encited to refresh the site's 
 - Crawler analytics: which bots visit, what they're served, crawl-budget savings
 - Per-page snapshots — see exactly what crawlers receive from your Pre-rendering dashboard
 - Index status tracking and AI-visibility monitoring
+- Content gap analysis — see what's ranking and getting cited in your space that you haven't written yet, and turn AI's fan-out queries into research-backed content plans
 
 An active Encited subscription is required. Manage plans at [encited.com](https://encited.com).
