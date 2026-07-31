@@ -124,15 +124,17 @@ export const SiteConfiguration = () => {
           >
             {settings.enabled ? "Disable prerendering" : "Enable prerendering"}
           </Button>
-          <Button
-            level="secondary"
-            onClick={() => testMutation.mutate()}
-            loading={testMutation.isPending}
-          >
-            Test connection
-          </Button>
+          {settings.enabled && (
+            <Button
+              level="secondary"
+              onClick={() => testMutation.mutate()}
+              loading={testMutation.isPending}
+            >
+              Test connection
+            </Button>
+          )}
         </ButtonGroup>
-        {testResult && (
+        {settings.enabled && testResult && (
           <Alert
             type={testResultView(testResult.status, settings.domain).type}
             className="tw-my-3"
